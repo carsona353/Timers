@@ -289,13 +289,30 @@
     });
   }
 
-  function updateDisplay() {
-    if (!timers.length) {
-      $("currentName").textContent = "No timers";
-      $("display").textContent = "00:00";
-      $("progressBar").style.width = "0%";
-      return;
-    }
+ function updateDisplay() {
+  if (!timers.length) {
+    $("currentName").textContent = "No timers";
+    $("display").textContent = "00:00";
+    $("progressBar").style.width = "0%";
+    document.title = "Sequential Timer";
+    return;
+  }
+
+  const t = timers[currentIndex];
+  $("currentName").textContent = t.name || "Unnamed timer";
+
+  const timeText = formatTime(currentRemaining);
+  $("display").textContent = timeText;
+
+  // Show the remaining time in the browser tab.
+  document.title = `${timeText} — ${t.name || "Sequential Timer"}`;
+
+  const total = totalSeconds(t);
+  $("progressBar").style.width =
+    total > 0
+      ? `${Math.max(0, Math.min(100, (1 - currentRemaining / total) * 100))}%`
+      : "100%";
+}
     const t = timers[currentIndex];
     $("currentName").textContent = t.name || "Unnamed timer";
     $("display").textContent = formatTime(currentRemaining);
